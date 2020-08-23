@@ -37,6 +37,22 @@ impl Default for Person {
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.is_empty() { return Person::default() }
+        let parts = s.splitn(2, ",").collect::<Vec<&str>>();
+        let name = if let Some(name_part) = parts.get(0) {
+            if name_part.is_empty() { return Person::default(); }
+            name_part.to_string()
+        } else {
+            return Person::default();
+        };
+        let age = if let Some(age_part) = parts.get(1) {
+            if let Ok(age) = age_part.parse::<usize>() {
+                age
+            } else { return Person::default() }
+        } else {
+            return Person::default()
+        };
+        return Person { name, age };
     }
 }
 
